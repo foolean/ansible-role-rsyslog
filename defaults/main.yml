@@ -1,0 +1,36 @@
+# Copyright (c) 2023, Bennett Samowich <bennett@foolean.org>
+# All rights reserved
+# SPDX short identifier: BSD-3-Clause
+---
+
+# rsyslog_logrotate_files
+#    List of files to be rotated via the rsyslog schedule
+#    (default: /var/log/[syslog|kernel|cron|maillog|messages|secure|spooler|boot.log|sudo.log])
+rsyslog_logrotate_files:
+  - '/var/log/syslog'
+  - '/var/log/kernel'
+  - '/var/log/cron'
+  - '/var/log/maillog'
+  - '/var/log/messages'
+  - '/var/log/secure'
+  - '/var/log/spooler'
+  - '/var/log/boot.log'
+  - '/var/log/sudo.log'
+
+# rsyslog_logrotate_rotate
+#     Number of rotated /var/log/syslog files to keep
+#      (default: 10)
+rsyslog_logrotate_rotate: 10
+
+# rsyslog_logrotate_size
+#     Size of the /var/log/syslog file when it is to be rotated
+#   (default: 10M)
+rsyslog_logrotate_size: '10M'
+
+# rsyslog_remote_loghost
+#      Remote log server, or servers, to send logs to
+#      Preceed the server with '@' for UDP and '@@' for TCP
+#      '@@' will be used if neither '@' or '@@' are specified.
+#      (default: null)
+rsyslog_remote_loghost: null
+

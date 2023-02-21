@@ -1,0 +1,23 @@
+{% if rsyslog_remote_loghost != None %}
+# buffers remote syslog to memory and disk in case of remote syslog service disruption
+$ActionQueueType LinkedList
+$ActionQueueFileName netforward
+$ActionResumeRetryCount -1
+$ActionQueueSaveOnShutdown on
+
+# CIS: Ensure rsyslog is configured to send logs to a remote log host
+{% if rsyslog_remote_host is iterable and (rsyslog_remote_host is not string and rsyslog_remote_host is not mapping) %}
+{%  for remote_host in rsyslog_remote_loghost|unique|sort %}
+{%      if not remote_host.startswith('@') %}
+*.* @@{{ remote_host }}
+{%      else %}
+*.* {{ remote_host }}
+{%      endif %}
+{%  endfor %}
+{% else %}
+{%  if not rsyslog_remote_loghost.startswith('@') %}
+*.* @@{{ rsyslog_remote_loghost }}
+{%  else %}
+*.* {{ rsyslog_remote_loghost }}
+{%  endif %}
+{% endif %}

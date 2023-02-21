@@ -1,0 +1,61 @@
+# Copyright (c) 2023, Bennett Samowich <bennett@foolean.org>
+# All rights reserved
+# SPDX short identifier: BSD-3-Clause
+---
+
+- name: Role foolean/rsyslog
+  block:
+
+  - name: CIS | Ensure rsyslog is installed
+    become: true
+    ansible.builtin.package:
+      name: 'rsyslog'
+      state: present
+
+  - name: CIS | Ensure rsyslog service is enabled
+    become: true
+    ansible.builtin.systemd:
+      name: 'rsyslog'
+      masked: false
+      enabled: true
+      state: started
+
+  - name: CIS | Ensure rsyslog default file permissions configured
+    become: true
+    ansible.builtin.template:
+      src: 'etc/rsyslog.conf.j2'
+      dest: '/etc/rsyslog.conf'
+      owner: 'root'
+      group: 'root'
+      mode: '0644'
+    notify:
+      - 'Restart rsyslog'
+
+  - name: Ensure permissions on /etc/rsyslog.d
+    become: true
+    ansible.builtin.file:
+      name: '/etc/rsyslog.d'
+      owner: 'root'
+      group: 'root'
+      mode: '0755'
+
+  - name: CIS | Ensure rsyslog is configured to send logs to a remote log host
+    become: true
+    ansible.builtin.template:
+      src: 'etc/rsyslog.d/11-remotesyslog.conf.j2'
+      dest: '/etc/rsyslog.d/11-remotesyslog.conf'
+      owner: 'root'
+      group: 'root'
+      mode: '0644'
+    notify:
+      - 'Restart rsyslog'
+    when:
+      - rsyslog_remote_loghost != None
+
+  # Flush any handlers that we might have called
+  - name: Flush handlers
+    ansible.builtin.meta:
+      flush_handlers
+
+  tags:
+    - 'role_foolean_rsyslog'

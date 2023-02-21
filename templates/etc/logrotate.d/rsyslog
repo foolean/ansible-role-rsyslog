@@ -1,0 +1,28 @@
+{% if rsyslog_logrotate_files != None %}
+{% for logrotate_file in rsyslog_logrotate_files|unique|sort %}
+{{ logrotate_file }}
+{% endfor %}
+{% endif %}
+
+/var/log/syslog
+/var/log/kernel
+/var/log/cron
+/var/log/maillog
+/var/log/messages
+/var/log/secure
+/var/log/spooler
+/var/log/boot.log
+/var/log/sudo.log
+{
+        size {{ rsyslog_logrotate_size }}
+        daily
+        rotate {{ rsyslog_logrotate_rotate }}
+        missingok
+        notifempty
+        delaycompress
+        compress
+        sharedscripts
+        postrotate
+                service rsyslog restart
+        endscript
+}
