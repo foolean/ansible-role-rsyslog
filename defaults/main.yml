@@ -3,6 +3,18 @@
 # SPDX short identifier: BSD-3-Clause
 ---
 
+# rsyslog_rate_limit_burst
+#   The message limit applied to the 'rate_limit_interval' time range
+#   Set to 0 to disable rate limiting
+#   (default: 20000)
+rsyslog_rate_limit_burst: 20000
+
+# rsyslog_rate_limit_interval
+#   The time interval for which message limiting will be applied.
+#   Set to 0 to disable rate limiting
+#   (default: 600)
+rsyslog_rate_limit_interval: 600
+
 # rsyslog_logrotate_files
 #    List of files to be rotated via the rsyslog schedule
 #    (default: /var/log/[syslog|kernel|cron|maillog|messages|secure|spooler|boot.log|sudo.log])

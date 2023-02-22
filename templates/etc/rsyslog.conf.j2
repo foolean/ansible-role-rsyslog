@@ -35,6 +35,12 @@ module(load="builtin:omfile" Template="RSYSLOG_TraditionalFileFormat")
 # Include all config files in /etc/rsyslog.d/
 include(file="/etc/rsyslog.d/*.conf" mode="optional")
 
+# Configure rate limiting
+$SystemLogRateLimitInterval {{ rsyslog_rate_limit_interval }}
+$SystemLogRateLimitBurst {{ rsyslog_rate_limit_burst }}
+$imjournalRatelimitInterval {{ rsyslog_rate_limit_interval }}
+$imjournalRatelimitBurst {{ rsyslog_rate_limit_burst }}
+
 # Set the default permissions for all log files.
 # CIS: 4.2.1.3 Ensure rsyslog default file permissions configured (Scored)
 $FileOwner root
@@ -47,18 +53,17 @@ $Umask 0022
 
 # Log all kernel messages to the console.
 # Logging much else clutters up the screen.
-#kern.*                                                 /dev/console
+kern.*                                                  /var/log/kernel
 
 # Log anything (except mail) of level info or higher.
 # Don't log private authentication messages!
-*.info;mail.none;authpriv.none;cron.none                /var/log/messages
+*.debug;*.info;mail.none;authpriv.none;cron.none        /var/log/messages
 
 # The authpriv file has restricted access.
 authpriv.*                                              /var/log/secure
 
 # Log all the mail messages in one place.
 mail.*                                                  -/var/log/maillog
-
 
 # Log cron stuff
 cron.*                                                  /var/log/cron
