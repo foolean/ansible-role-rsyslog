@@ -45,4 +45,3 @@ rsyslog_logrotate_size: '10M'
 #      '@@' will be used if neither '@' or '@@' are specified.
 #      (default: null)
 rsyslog_remote_loghost: null
-
