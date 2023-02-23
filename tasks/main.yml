@@ -52,6 +52,15 @@
     when:
       - rsyslog_remote_loghost != None
 
+  - name: CIS | Ensure logrotate is configured
+    become: true
+    ansible.builtin.template:
+      src: 'etc/logrotate.d/rsyslog.j2'
+      dest: '/etc/logrotate.d/rsyslog'
+      owner: 'root'
+      group: 'root'
+      mode: '0644'
+
   # Flush any handlers that we might have called
   - name: Flush handlers
     ansible.builtin.meta:
