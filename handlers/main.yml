@@ -8,3 +8,10 @@
   ansible.builtin.service:
     name: 'rsyslog'
     state: restarted
+  notify:
+    - 'Ensure permissions on all logfiles are configured'
+
+- name: Ensure permissions on all logfiles are configured
+  become: true
+  ansible.builtin.command:
+    cmd: 'find /var/log/ -type f -perm /g+wx,o+rwx -exec chmod g-wx,o-rwx "{}" +'
